@@ -1,5 +1,6 @@
 package com.tis.todoify.presentation.screens.add.components
 
+import android.service.autofill.OnClickAction
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
@@ -13,8 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AddFab() {
-    IconButton(onClick = { /*TODO*/ }) {
+fun AddFab(
+    onClick: ()-> Unit,
+) {
+    IconButton(onClick =onClick) {
         Surface(
             elevation = 8.dp, shape = CircleShape, color = MaterialTheme.colors.primary
         ) {

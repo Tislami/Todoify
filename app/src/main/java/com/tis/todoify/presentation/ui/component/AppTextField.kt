@@ -60,7 +60,6 @@ fun AppTextField(
     isFocused: Boolean = true,
 ) {
     var value by remember { mutableStateOf("") }
-
     val focusRequester = FocusRequester()
 
     LaunchedEffect(key1 = Unit){
@@ -76,11 +75,6 @@ fun AppTextField(
             .focusRequester(focusRequester)
             .fillMaxWidth()
             .onKeyEvent { keyEvent ->
-
-                if (keyEvent.nativeKeyEvent.keyCode == android.view.KeyEvent.KEYCODE_ENTER)
-                {
-                    Log.d("AddScreen", "Enter")
-                }
                 if (value.isEmpty()) {
                     if (keyEvent.key.keyCode == Key.Backspace.keyCode) {
                         if (onBackspaceClick != null) {

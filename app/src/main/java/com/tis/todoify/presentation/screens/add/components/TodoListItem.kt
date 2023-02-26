@@ -25,7 +25,8 @@ import com.tis.todoify.presentation.ui.component.AppTextField
 fun TodoListItem(
     onBackspaceClick: () -> Unit,
     onDone : () -> Unit,
-    label : String? = null
+    label : String? = null,
+    onSave : ()->Unit = {}
 ) {
     var isComplete by remember { mutableStateOf(false) }
 
