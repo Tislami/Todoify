@@ -1,4 +1,4 @@
-package com.tis.todoify.ui.theme
+package com.tis.todoify.presentation.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
@@ -7,24 +7,20 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = YellowDark,
+    onPrimary = Black,
+    onSurface = White,
+    background = Black3,
+    onBackground = White
+
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
-
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
+    primary = YellowLight,
+    onPrimary = White,
+    onSurface = White,
+    background = White,
+    onBackground = Black
 )
 
 @Composable

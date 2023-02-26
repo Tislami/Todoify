@@ -1,4 +1,4 @@
-package com.tis.todoify.ui.theme
+package com.tis.todoify.presentation.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
