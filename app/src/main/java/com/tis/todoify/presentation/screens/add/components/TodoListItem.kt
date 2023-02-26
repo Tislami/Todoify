@@ -10,16 +10,11 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEvent
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,9 +24,9 @@ import com.tis.todoify.presentation.ui.component.AppTextField
 @Composable
 fun TodoListItem(
     onBackspaceClick: () -> Unit,
+    onDone : () -> Unit,
     label : String? = null
 ) {
-
     var isComplete by remember { mutableStateOf(false) }
 
     Row(
@@ -54,7 +49,9 @@ fun TodoListItem(
         )
 
         AppTextField(
+            imeAction = ImeAction.Done,
             onBackspaceClick = onBackspaceClick,
+            onDone = onDone,
             label = label,
             fonsSize = 16.sp,
             textDecoration = if (isComplete) TextDecoration.LineThrough

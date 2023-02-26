@@ -23,9 +23,7 @@ import androidx.compose.ui.focus.*
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.layout.onSizeChanged
@@ -57,12 +55,18 @@ fun AppTextField(
     fonsSize: TextUnit = 18.sp,
     textDecoration: TextDecoration? = null,
     onBackspaceClick: (() -> Unit)? = null,
+    imeAction: ImeAction = ImeAction.Default,
+    onDone: (() -> Unit)? = null,
+    isFocused: Boolean = true,
 ) {
     var value by remember { mutableStateOf("") }
 
     val focusRequester = FocusRequester()
+
     LaunchedEffect(key1 = Unit){
-        focusRequester.requestFocus()
+        if (isFocused) {
+            focusRequester.requestFocus()
+        }
     }
 
     BasicTextField(
@@ -72,23 +76,32 @@ fun AppTextField(
             .focusRequester(focusRequester)
             .fillMaxWidth()
             .onKeyEvent { keyEvent ->
+
+                if (keyEvent.nativeKeyEvent.keyCode == android.view.KeyEvent.KEYCODE_ENTER)
+                {
+                    Log.d("AddScreen", "Enter")
+                }
                 if (value.isEmpty()) {
                     if (keyEvent.key.keyCode == Key.Backspace.keyCode) {
                         if (onBackspaceClick != null) {
                             onBackspaceClick()
                         }
-                        return@onKeyEvent true
                     }
+                    return@onKeyEvent true
                 }
                 false
             },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Default,
+            imeAction = imeAction,
             capitalization = KeyboardCapitalization.Sentences
         ),
         keyboardActions= KeyboardActions(
-            onPrevious = {}
+            onDone = {
+                if (onDone != null) {
+                    onDone()
+                }
+            }
         ),
         textStyle = TextStyle(
             color = MaterialTheme.colors.onSurface,

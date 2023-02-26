@@ -39,6 +39,17 @@ fun AddScreen(
                     val index = contents.size
                     contents.add(index = index) {
                         TodoListItem(
+                            onDone = {
+                                val index1 = contents.size
+                                contents.add(index = index1) {
+                                    AppTextField(
+                                        onBackspaceClick = {
+                                            focusManager.moveFocus(FocusDirection.Up)
+                                            contents.removeAt(index1)
+                                        },
+                                    )
+                                }
+                            },
                             onBackspaceClick = {
                                 focusManager.moveFocus(FocusDirection.Previous)
                                 contents.removeAt(index)
@@ -48,16 +59,7 @@ fun AddScreen(
                     contentState.set(key = "TodoListItem", value = contents)
                 },
                 addTextField = {
-                    val index = contents.size
-                    contents.add(index = index) {
-                        AppTextField(
-                            onBackspaceClick = {
-                                focusManager.moveFocus(FocusDirection.Up)
-                                contents.removeAt(index)
-                            },
-                        )
-                    }
-                    contentState.set(key = "TextField", value = contents)
+
                 },
             )
         },
@@ -86,6 +88,7 @@ fun AddContent(
             modifier = Modifier.padding(bottom = 8.dp),
             label = "Title",
             fonsSize = 24.sp,
+            isFocused = false
         )
 
         Divider(color = MaterialTheme.colors.primary)
@@ -94,6 +97,7 @@ fun AddContent(
             modifier = Modifier.padding(vertical = 8.dp),
             label = "Description",
             fonsSize = 18.sp,
+            isFocused = false
         )
 
         if (contents != null) {
