@@ -8,29 +8,32 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.tis.todoify.R
 
 @Composable
-fun Folder() {
+fun TodoifyFolderItem() {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.25f),
         contentColor = MaterialTheme.colors.onSurface,
         shape = MaterialTheme.shapes.large,
-        modifier = Modifier.size(150.dp)
-            .clickable {  }
+        modifier = Modifier
+            .size(150.dp)
+            .clickable { }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(vertical = 8.dp),
+                .padding(vertical = 4.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Icon(
-                imageVector = Icons.Default.ShoppingCart,
+                painter = painterResource(id = R.drawable.folder_open_24),
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize().weight(1f)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
             )
             Text(text = "Folder")
         }
