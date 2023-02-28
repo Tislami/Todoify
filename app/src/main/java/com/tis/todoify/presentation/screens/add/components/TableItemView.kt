@@ -93,9 +93,7 @@ fun TableCell(
             capitalization = KeyboardCapitalization.Sentences
         ),
         keyboardActions = KeyboardActions(
-            onNext = {
-                focusManager.moveFocus(FocusDirection.Next)
-            }
+            onNext = { focusManager.moveFocus(FocusDirection.Next) }
         ),
         textStyle = TextStyle(
             color = MaterialTheme.colors.onSurface,

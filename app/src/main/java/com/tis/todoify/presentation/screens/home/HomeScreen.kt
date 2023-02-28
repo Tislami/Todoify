@@ -1,8 +1,6 @@
 package com.tis.todoify.presentation.screens.home
 
 import android.graphics.DashPathEffect
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,14 +11,13 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.tis.todoify.R
-import com.tis.todoify.presentation.screens.home.components.HomeTopAppBar
+import com.tis.todoify.presentation.screens.home.components.top_app_bar.HomeTopAppBar
 import com.tis.todoify.presentation.ui.card.TodoifyFolderItem
 import com.tis.todoify.presentation.ui.card.TodoifyGridItem
 import com.tis.todoify.presentation.ui.card.TodoifyListItem
@@ -36,9 +33,15 @@ fun HomeScreen() {
 
     var viewStyleState by rememberSaveable { mutableStateOf(ViewStyleState.List) }
 
+    var query = remember {
+        mutableStateOf("")
+    }
+
     Scaffold(
         topBar = {
             HomeTopAppBar(
+                query = query.value,
+                onValueChange = {query.value = it},
                 listView = { viewStyleState = ViewStyleState.List },
                 folderView = { viewStyleState = ViewStyleState.Folder },
                 gridView = { viewStyleState = ViewStyleState.Grid }
