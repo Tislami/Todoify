@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun AddTopAppBar(
+    addTextFieldItem: () -> Unit,
     addTodoItem: () -> Unit,
     addTable: () -> Unit,
 ) {
@@ -32,6 +33,15 @@ fun AddTopAppBar(
             }
         },
         actions = {
+
+            IconButton(onClick = addTextFieldItem) {
+                Icon(
+                    painter = painterResource(id = com.tis.todoify.R.drawable.text_fields_24),
+                    contentDescription = "Add TextField",
+                    tint = MaterialTheme.colors.onSurface
+                )
+            }
+
             IconButton(onClick = addTodoItem) {
                 Icon(
                     painter = painterResource(id = com.tis.todoify.R.drawable.add_task_24),

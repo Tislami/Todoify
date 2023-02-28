@@ -1,15 +1,17 @@
 package com.tis.todoify.presentation.screens.add
 
-import android.util.Log
+import NoteItem
+import NoteModel
+import TableItem
+import TextFieldItem
+import TodoItem
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -21,27 +23,35 @@ import com.tis.todoify.presentation.ui.component.AppTextField
 fun AddScreen(
     addViewModel: AddViewModel = hiltViewModel()
 ) {
-    val focusManager = LocalFocusManager.current
-    val contents = remember { mutableStateListOf<@Composable (() -> Unit)>() }
-
+    val noteModelState = addViewModel.noteState.value
     Scaffold(
         topBar = {
             AddTopAppBar(
-                addTodoItem = { addTodoItem(contents, focusManager) },
-                addTable = { addTable(contents, focusManager) }
+                addTextFieldItem = { addViewModel.addNoteItem(TextFieldItem()) },
+                addTodoItem = { addViewModel.addNoteItem(TodoItem()) },
+                addTable = {
+                    addViewModel.addNoteItem(
+                        TableItem(
+                            columnCount = 3,
+                            rowCount = 3,
+                            tableValues = buildList {
+                                repeat(3 * 3) { add("$it") }
+                            }
+                        )
+                    )
+                },
             )
         },
-        floatingActionButton = {
-            AddFab(
-                onClick = {
-
-                }
-            )
-        }
+        floatingActionButton = { AddFab(onClick = {}) }
     ) { innerPadding ->
         AddContent(
             modifier = Modifier.padding(innerPadding),
-            contents = contents
+            noteModel = noteModelState,
+            setTitle = addViewModel::setTitle,
+            addNoteItem = addViewModel::addNoteItem,
+            updateNoteItem = addViewModel::updateNoteItem,
+            deleteNoteItem = addViewModel::deleteNoteItem,
+            updateTableCell = addViewModel::updateTableCell,
         )
     }
 }
@@ -49,8 +59,15 @@ fun AddScreen(
 @Composable
 fun AddContent(
     modifier: Modifier,
-    contents: List<@Composable (() -> Unit)>? = null
+    noteModel: NoteModel,
+    setTitle: (String) -> Unit,
+    addNoteItem: (NoteItem) -> Unit,
+    deleteNoteItem: (NoteItem) -> Unit,
+    updateNoteItem: (NoteItem, NoteItem) -> Unit,
+    updateTableCell: (TableItem, TableOperation) -> NoteItem,
 ) {
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -58,6 +75,8 @@ fun AddContent(
     ) {
 
         AppTextField(
+            value = noteModel.title,
+            onValueChange = setTitle,
             modifier = Modifier.padding(bottom = 8.dp),
             label = "Title",
             fonsSize = 24.sp,
@@ -71,16 +90,58 @@ fun AddContent(
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = 8.dp)
         ) {
-            AppTextField(
-                modifier = Modifier.padding(vertical = 8.dp),
-                label = "Description",
-                fonsSize = 18.sp,
-                isFocused = false
-            )
 
-            if (contents != null) {
-                for (content in contents) {
-                    content()
+            noteModel.noteItemList.forEach { noteItem ->
+                when (noteItem.state) {
+                    NoteItemState.TodoItem -> {
+                        TodoItemView(
+                            todoItem = noteItem as TodoItem,
+                            updateTodoItemText = { updateNoteItem(noteItem, noteItem.copy(text = it)) },
+                            updateTodoItemValue = { updateNoteItem(noteItem, noteItem.copy(isComplete = it)) },
+                            onBackspaceClick = {
+                                deleteNoteItem(noteItem)
+                                focusManager.moveFocus(FocusDirection.Left)
+                            },
+                            onDone = { addNoteItem(TextFieldItem()) }
+                        )
+                    }
+                    NoteItemState.TextField -> {
+                        AppTextField(
+                            value = (noteItem as TextFieldItem).text,
+                            onValueChange = { updateNoteItem(noteItem, noteItem.copy(text = it)) },
+                            modifier = Modifier.padding(vertical = 8.dp),
+                            onBackspaceClick = {
+                                deleteNoteItem(noteItem)
+                                focusManager.moveFocus(FocusDirection.Previous)
+                            },
+                            fonsSize = 18.sp,
+                        )
+                    }
+                    NoteItemState.Table -> {
+                        TableItemView(
+                            tableItem = noteItem as TableItem,
+                            updateTableItem = { index, value ->
+                                updateNoteItem(noteItem,
+                                    noteItem.copy(
+                                        tableValues = noteItem.tableValues.toMutableList()
+                                            .apply { set(index, value) }
+                                    )
+                                )
+                            },
+                            onDeleteRow = {
+                                updateNoteItem(
+                                    noteItem,
+                                    updateTableCell(noteItem, TableOperation.DeleteRow)
+                                )
+                            },
+                            onDeleteColumn = {
+                                updateNoteItem(
+                                    noteItem,
+                                    updateTableCell(noteItem, TableOperation.DeleteColumn)
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -88,4 +149,7 @@ fun AddContent(
 }
 
 
-//Todo: item ilave ettikten sonra ortalardan bir itemi silende ve sonrasında bir sonrakını silende crush olur. Bunun sebebi bir sonrakı item'in indexi artıq liste içinde olmur. Listeden set çevir
+//Todo: Hücrelerden yazıyı sildiğinde bir üst hücreyle birleştirmen
+//Todo: Hücreler arası item ekleme
+//Todo: Itemleri özelleştirme
+//Todo: Table hücreleri verilerini düzgün ayarlama

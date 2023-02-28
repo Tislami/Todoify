@@ -1,46 +1,27 @@
 package com.tis.todoify.presentation.screens.detail
 
-import android.util.Log
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.onPlaced
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tis.todoify.R
-import com.tis.todoify.domain.model.Note
-import com.tis.todoify.domain.model.defaultNote
+import com.tis.todoify.domain.model.DenemeNote
+import com.tis.todoify.domain.model.defaultDenemeNote
 import com.tis.todoify.presentation.screens.detail.components.DetailTopAppBar
-import com.tis.todoify.presentation.ui.theme.TodoifyTheme
-import com.tis.todoify.presentation.ui.theme.White
-import java.util.Date
-import kotlin.math.log
 
 @Composable
 fun DetailScreen(
@@ -57,7 +38,7 @@ fun DetailScreen(
         topBar = {
             DetailTopAppBar(
                 colors,
-                title = defaultNote.title,
+                title = defaultDenemeNote.title,
                 isTitleVisible = isTitleVisible.value
             )
         },
@@ -75,7 +56,7 @@ fun DetailScreen(
 @Composable
 fun DetailContent(
     modifier: Modifier,
-    note: Note = defaultNote,
+    denemeNote: DenemeNote = defaultDenemeNote,
     isTitleVisible: MutableState<Boolean>,
     colors: List<Color>
 ) {
@@ -93,7 +74,7 @@ fun DetailContent(
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Head(note, isTitleVisible = isTitleVisible)
+        Head(denemeNote, isTitleVisible = isTitleVisible)
 
         Surface(
             shape = RoundedCornerShape(topEnd = 64.dp),
@@ -111,12 +92,12 @@ fun DetailContent(
 
 @Composable
 private fun Head(
-    note: Note,
+    denemeNote: DenemeNote,
     isTitleVisible: MutableState<Boolean>,
 ) {
 
     var ti = remember {
-        mutableStateOf(note.title)
+        mutableStateOf(denemeNote.title)
     }
     var isEditMode by remember { mutableStateOf(false) }
 

@@ -1,5 +1,6 @@
 package com.tis.todoify.presentation.screens.add.components
 
+import TableItem
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,35 +28,44 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun TableItem(
-    columnCount: Int = 4,
-    rowCount: Int = 4,
-) {
+fun TableItemView(
+    tableItem: TableItem,
+    updateTableItem: (Int, String) -> Unit,
+    onDeleteColumn: () -> Unit,
+    onDeleteRow: () -> Unit,
 
-    var columnCountState by remember { mutableStateOf(columnCount) }
-    var rowCountState by remember { mutableStateOf(rowCount) }
-
+    ) {
     LazyColumn(
         modifier = Modifier
             .horizontalScroll(rememberScrollState())
             .padding(top = 8.dp)
             .heightIn(max = 500.dp)
     ) {
-        items(columnCountState) { column ->
+        items(tableItem.columnCount) { column ->
             Row(verticalAlignment = Alignment.Bottom) {
-                for (i in 0 until rowCountState) {
+                for (i in 0 until tableItem.rowCount) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        if (column == 0 && i == rowCountState - 1) {
-                            IconButton(onClick = { rowCountState -= 1 }) {
+
+                        if (column == 0 && i == tableItem.rowCount - 1) {
+                            IconButton(onClick = onDeleteRow) {
                                 Icon(imageVector = Icons.Default.Close, contentDescription = null)
                             }
                         }
-                        TableCell(label = "$column  $i")
+
+                        TableCell(
+                            value = tableItem.tableValues[tableItem.rowCount * column + i],
+                            onValueChange = {
+                                updateTableItem(
+                                    tableItem.rowCount * column + i,
+                                    it
+                                )
+                            }
+                        )
                     }
                 }
 
-                if (column == columnCountState - 1 && rowCountState>0) {
-                    IconButton(onClick = { columnCountState -= 1 }) {
+                if (column == tableItem.columnCount-1 && tableItem.rowCount > 0) {
+                    IconButton(onClick = onDeleteColumn) {
                         Icon(imageVector = Icons.Default.Close, contentDescription = null)
                     }
                 }
@@ -66,16 +76,16 @@ fun TableItem(
 
 @Composable
 fun TableCell(
+    value: String,
+    onValueChange: (String) -> Unit,
     backgroundColor: Color = Color.Unspecified,
-    label: String? = null
 ) {
 
-    var value by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
 
     BasicTextField(
-        value = value + label,
-        onValueChange = { value = it },
+        value = value,
+        onValueChange = onValueChange,
         maxLines = 1,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,
