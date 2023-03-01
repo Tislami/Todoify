@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.tis.todoify.R
 import com.tis.todoify.domain.model.DenemeNote
 import com.tis.todoify.domain.model.defaultDenemeNote
@@ -25,6 +26,7 @@ import com.tis.todoify.presentation.screens.detail.components.DetailTopAppBar
 
 @Composable
 fun DetailScreen(
+    navHostController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
 

@@ -11,9 +11,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.tis.todoify.utils.onClick
 
 @Composable
 fun AddTopAppBar(
+    backOnClick: onClick,
     addTextFieldItem: () -> Unit,
     addTodoItem: () -> Unit,
     addTable: () -> Unit,
@@ -24,7 +26,7 @@ fun AddTopAppBar(
         elevation = 0.dp,
         title = {},
         navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = backOnClick) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back",

@@ -1,35 +1,34 @@
 package com.tis.todoify.presentation.screens.home.components.top_app_bar
 
-
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.tis.todoify.presentation.ui.card.TagItemCard
 import com.tis.todoify.utils.onClick
 import com.tis.todoify.utils.onValueChange
 
 @Composable
-fun HomeTopAppBar(
+fun FolderTopAppBar(
+    title: String,
     query: String,
     onValueChange: onValueChange,
     listView: onClick,
-    folderView: onClick,
     gridView: onClick,
 ) {
     TopAppBar(
         backgroundColor = MaterialTheme.colors.background,
-        elevation = 1.dp,
+       // modifier = Modifier.border(BorderStroke(1.dp, Color.Cyan)),
+        elevation = 0.dp,
         title = {
             Text(
-                text = "Notes",
+                text = title,
                 color = MaterialTheme.colors.onBackground,
                 maxLines = 1,
                 softWrap = true,
@@ -38,17 +37,17 @@ fun HomeTopAppBar(
         },
         actions = {
 
-            ViewButtonField(gridView, listView, folderView)
+            ViewButtonField(gridView, listView)
 
 
             SearchButtonField(
                 query = query,
-                onValueChange = onValueChange,
+                onValueChange= onValueChange,
                 onClick = { }
             )
 
 
-            IconButton(onClick = { }) {
+            IconButton(onClick = { /*TODO*/ }) {
                 Icon(
                     imageVector = Icons.Default.MoreVert,
                     contentDescription = "More",
@@ -56,6 +55,14 @@ fun HomeTopAppBar(
                 )
             }
         },
+        navigationIcon = {
+
+            IconButton(
+                onClick = { /*TODO*/ },
+
+            ) {
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+            }
+        }
     )
 }
-

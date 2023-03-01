@@ -18,15 +18,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.tis.todoify.R
+import com.tis.todoify.utils.onClick
 
 
 @Composable
 fun ViewButtonField(
-    gridView: () -> Unit,
-    listView: () -> Unit,
-    folderView: () -> Unit
+    gridView: onClick? = null,
+    listView: onClick? = null,
+    folderView: onClick? = null,
 ) {
-    var width by remember { mutableStateOf(0.dp) }
+    var width by remember { mutableStateOf(100.dp) }
 
     IconButton(
         modifier = Modifier,
@@ -52,20 +53,27 @@ fun ViewButtonField(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ViewButton(
-            icon = Icons.Default.List,
-            action = listView
-        )
 
-        ViewButton(
-            icon = painterResource(id = R.drawable.grid_view_24),
-            action = gridView
-        )
+        if (listView != null) {
+            ViewButton(
+                icon = Icons.Default.List,
+                action = listView
+            )
+        }
 
-        ViewButton(
-            icon = painterResource(id = R.drawable.folder_copy_24),
-            action = folderView
-        )
+        if (gridView != null) {
+            ViewButton(
+                icon = painterResource(id = R.drawable.grid_view_24),
+                action = gridView
+            )
+        }
+
+        if (folderView != null) {
+            ViewButton(
+                icon = painterResource(id = R.drawable.folder_copy_24),
+                action = folderView
+            )
+        }
     }
 }
 

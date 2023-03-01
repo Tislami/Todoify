@@ -23,8 +23,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
+import com.tis.todoify.presentation.navigation.AppNavigation
 import com.tis.todoify.presentation.screens.add.AddScreen
 import com.tis.todoify.presentation.screens.detail.DetailScreen
+import com.tis.todoify.presentation.screens.home.FolderScreen
 import com.tis.todoify.presentation.screens.home.HomeScreen
 import com.tis.todoify.presentation.ui.component.AppTextField
 import com.tis.todoify.presentation.ui.theme.TodoifyTheme
@@ -37,7 +39,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TodoifyTheme(darkTheme = true) {
-                HomeScreen()
+                AppNavigation()
             }
         }
     }

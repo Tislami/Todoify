@@ -17,26 +17,28 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.*
+import com.tis.todoify.utils.onClick
+import com.tis.todoify.utils.onValueChange
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AppTextField(
     value: String,
-    onValueChange : (String) -> Unit,
+    onValueChange : onValueChange,
     modifier: Modifier = Modifier,
     label: String? = null,
     fonsSize: TextUnit = 18.sp,
     textDecoration: TextDecoration? = null,
-    onBackspaceClick: (() -> Unit)? = null,
+    onBackspaceClick: (onClick)? = null,
     imeAction: ImeAction = ImeAction.Default,
-    onDone: (() -> Unit)? = null,
-    isFocused: Boolean = true,
+    onDone: (onClick)? = null,
+    isFocused: Boolean = false,
 ) {
     val focusRequester = FocusRequester()
 
     LaunchedEffect(key1 = Unit){
         if (isFocused) {
-            focusRequester.requestFocus()
+          //  focusRequester.requestFocus()
         }
     }
 

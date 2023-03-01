@@ -20,23 +20,23 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.tis.todoify.utils.onClick
+import com.tis.todoify.utils.onValueChange
 
 
 @Composable
 fun SearchButtonField(
     query: String,
-    onValueChange: (String) -> Unit,
-    onClick: () -> Unit,
+    onValueChange: onValueChange,
+    onClick: onClick,
 ) {
     var height by remember { mutableStateOf(0.dp) }
 

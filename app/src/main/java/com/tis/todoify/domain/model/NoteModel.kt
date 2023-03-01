@@ -1,8 +1,18 @@
+import android.os.Build
+import androidx.annotation.RequiresApi
+import java.time.LocalDate
+import java.util.*
+
+
+
 data class NoteModel(
     val title: String = "",
     val description: String = "",
-    val noteItemList: List<NoteItem> = listOf(TextFieldItem(""))
-)
+    val noteItemList: List<NoteItem> = listOf(TextFieldItem("")),
+    val tag: String="Todo",
+    val id: UUID = UUID.randomUUID(),
+    val date: Calendar = Calendar.getInstance()
+    )
 
 sealed class NoteItem {
     abstract val state: NoteItemState

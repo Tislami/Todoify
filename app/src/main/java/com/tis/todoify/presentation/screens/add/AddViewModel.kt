@@ -5,7 +5,11 @@ import NoteModel
 import TableItem
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -13,6 +17,8 @@ class AddViewModel @Inject constructor() : ViewModel() {
 
     val noteState = mutableStateOf(NoteModel())
 
+    private val _eventFlow = MutableSharedFlow<AddUiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
     fun setTitle(value: String) {
         noteState.value = noteState.value.copy(title = value)
     }
@@ -66,6 +72,17 @@ class AddViewModel @Inject constructor() : ViewModel() {
             }
         }
     }
+
+
+    fun save(){
+
+    }
+}
+
+
+sealed class AddUiEvent(){
+    object Save : AddUiEvent()
+    data class Error(val message: String) : AddUiEvent()
 }
 
 

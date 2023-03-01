@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -16,17 +18,21 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.tis.todoify.presentation.screens.add.components.*
+import com.tis.todoify.presentation.ui.component.AppFab
 import com.tis.todoify.presentation.ui.component.AppTextField
 
 @Composable
 fun AddScreen(
+    navHostController: NavHostController,
     addViewModel: AddViewModel = hiltViewModel()
 ) {
     val noteModelState = addViewModel.noteState.value
     Scaffold(
         topBar = {
             AddTopAppBar(
+                backOnClick = { navHostController.popBackStack() },
                 addTextFieldItem = { addViewModel.addNoteItem(TextFieldItem()) },
                 addTodoItem = { addViewModel.addNoteItem(TodoItem()) },
                 addTable = {
@@ -42,7 +48,18 @@ fun AddScreen(
                 },
             )
         },
-        floatingActionButton = { AddFab(onClick = {}) }
+        floatingActionButton = {
+            AppFab(
+                icon = Icons.Default.Done,
+                onClick = {
+                    if (noteModelState.title.isEmpty()) {
+                        navHostController.popBackStack()
+                    } else {
+                        addViewModel.save()
+                    }
+                }
+            )
+        }
     ) { innerPadding ->
         AddContent(
             modifier = Modifier.padding(innerPadding),
@@ -80,7 +97,6 @@ fun AddContent(
             modifier = Modifier.padding(bottom = 8.dp),
             label = "Title",
             fonsSize = 24.sp,
-            isFocused = false
         )
 
         Divider(color = MaterialTheme.colors.primary)
@@ -96,8 +112,18 @@ fun AddContent(
                     NoteItemState.TodoItem -> {
                         TodoItemView(
                             todoItem = noteItem as TodoItem,
-                            updateTodoItemText = { updateNoteItem(noteItem, noteItem.copy(text = it)) },
-                            updateTodoItemValue = { updateNoteItem(noteItem, noteItem.copy(isComplete = it)) },
+                            updateTodoItemText = {
+                                updateNoteItem(
+                                    noteItem,
+                                    noteItem.copy(text = it)
+                                )
+                            },
+                            updateTodoItemValue = {
+                                updateNoteItem(
+                                    noteItem,
+                                    noteItem.copy(isComplete = it)
+                                )
+                            },
                             onBackspaceClick = {
                                 deleteNoteItem(noteItem)
                                 focusManager.moveFocus(FocusDirection.Left)
