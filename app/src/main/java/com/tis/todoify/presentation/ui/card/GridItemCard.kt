@@ -1,6 +1,5 @@
 package com.tis.todoify.presentation.ui.card
 
-import NoteModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,17 +13,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.tis.todoify.R
+import com.tis.todoify.domain.model.Note
 import kotlin.random.Random
 
 @Composable
 fun GridItemCard(
-    note: NoteModel,
+    modifier: Modifier = Modifier,
+    note: Note,
 ) {
 
 
@@ -32,7 +31,7 @@ fun GridItemCard(
     val color1 = Color (255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .clip(MaterialTheme.shapes.large)
             .clickable { }
             .background(

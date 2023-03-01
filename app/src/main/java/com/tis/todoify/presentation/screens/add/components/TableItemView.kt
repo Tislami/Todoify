@@ -1,6 +1,5 @@
 package com.tis.todoify.presentation.screens.add.components
 
-import TableItem
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,6 +25,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.tis.todoify.domain.model.TableItem
 
 @Composable
 fun TableItemView(

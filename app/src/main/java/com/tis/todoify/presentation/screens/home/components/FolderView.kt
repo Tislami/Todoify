@@ -1,6 +1,5 @@
 package com.tis.todoify.presentation.screens.home.components
 
-import NoteModel
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,12 +8,13 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.tis.todoify.domain.model.Note
 import com.tis.todoify.presentation.ui.card.FolderItemCard
 import com.tis.todoify.utils.onClick
 
 @Composable
 fun FolderView(
-    noteList: List<NoteModel>,
+    noteList: List<Note>,
     onClick: onClick
 ) {
     LazyVerticalGrid(

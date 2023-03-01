@@ -1,6 +1,6 @@
 package com.tis.todoify.presentation.screens.home
 
-import NoteModel
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -12,6 +12,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.tis.todoify.domain.model.FolderModel
+import com.tis.todoify.domain.model.Note
 import com.tis.todoify.domain.model.defaultFolderModel
 import com.tis.todoify.presentation.screens.home.components.top_app_bar.FolderTopAppBar
 import com.tis.todoify.presentation.ui.card.ListItemCard
@@ -21,7 +22,7 @@ fun FolderScreen(
     folderModel: FolderModel = defaultFolderModel,
 ) {
 
-    var viewStyleState by rememberSaveable { mutableStateOf(ViewStyleState.Folder) }
+    var viewStyleState by rememberSaveable { mutableStateOf(ViewStyle.Folder) }
     val query = remember { mutableStateOf("") }
 
     Scaffold(
@@ -30,8 +31,8 @@ fun FolderScreen(
                 title = folderModel.name,
                 query = query.value,
                 onValueChange = { query.value = it },
-                listView = { viewStyleState = ViewStyleState.List },
-                gridView = { viewStyleState = ViewStyleState.Grid }
+                listView = { viewStyleState = ViewStyle.List },
+                gridView = { viewStyleState = ViewStyle.Grid }
             )
         }
 
@@ -44,10 +45,11 @@ fun FolderScreen(
 }
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun FolderContent(
     modifier: Modifier,
-    noteList : List<NoteModel>
+    noteList : List<Note>
 ) {
 
     LazyColumn(
@@ -56,7 +58,10 @@ private fun FolderContent(
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ){
         items(noteList){note->
-            ListItemCard(note)
+            ListItemCard(
+                modifier= Modifier.animateItemPlacement(),
+                note = note
+            )
         }
     }
 }

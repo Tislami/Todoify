@@ -1,11 +1,10 @@
-import android.os.Build
-import androidx.annotation.RequiresApi
-import java.time.LocalDate
+package com.tis.todoify.domain.model
+
 import java.util.*
 
 
 
-data class NoteModel(
+data class Note(
     val title: String = "",
     val description: String = "",
     val noteItemList: List<NoteItem> = listOf(TextFieldItem("")),

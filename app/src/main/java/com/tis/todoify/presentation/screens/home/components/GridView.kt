@@ -1,6 +1,6 @@
 package com.tis.todoify.presentation.screens.home.components
 
-import NoteModel
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,22 +11,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import com.tis.todoify.domain.model.Note
 import com.tis.todoify.presentation.ui.card.GridItemCard
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GridView(
-    noteList: List<NoteModel>,
+    noteList: List<Note>,
 ) {
 
     LazyVerticalGrid(
-        columns  = GridCells.Fixed(2),
+        columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(noteList) { note ->
-            GridItemCard(note)
+            GridItemCard(
+                modifier = Modifier.animateItemPlacement(),
+                note = note
+            )
         }
     }
 }

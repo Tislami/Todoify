@@ -1,6 +1,5 @@
 package com.tis.todoify.presentation.screens.add.components
 
-import TodoItem
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -19,6 +18,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tis.todoify.R
+import com.tis.todoify.domain.model.TodoItem
 import com.tis.todoify.presentation.ui.component.AppTextField
 
 @Composable

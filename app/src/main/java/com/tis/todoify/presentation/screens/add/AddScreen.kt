@@ -1,10 +1,5 @@
 package com.tis.todoify.presentation.screens.add
 
-import NoteItem
-import NoteModel
-import TableItem
-import TextFieldItem
-import TodoItem
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -19,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.tis.todoify.domain.model.*
 import com.tis.todoify.presentation.screens.add.components.*
 import com.tis.todoify.presentation.ui.component.AppFab
 import com.tis.todoify.presentation.ui.component.AppTextField
@@ -63,7 +59,7 @@ fun AddScreen(
     ) { innerPadding ->
         AddContent(
             modifier = Modifier.padding(innerPadding),
-            noteModel = noteModelState,
+            note = noteModelState,
             setTitle = addViewModel::setTitle,
             addNoteItem = addViewModel::addNoteItem,
             updateNoteItem = addViewModel::updateNoteItem,
@@ -76,7 +72,7 @@ fun AddScreen(
 @Composable
 fun AddContent(
     modifier: Modifier,
-    noteModel: NoteModel,
+    note: Note,
     setTitle: (String) -> Unit,
     addNoteItem: (NoteItem) -> Unit,
     deleteNoteItem: (NoteItem) -> Unit,
@@ -92,7 +88,7 @@ fun AddContent(
     ) {
 
         AppTextField(
-            value = noteModel.title,
+            value = note.title,
             onValueChange = setTitle,
             modifier = Modifier.padding(bottom = 8.dp),
             label = "Title",
@@ -107,7 +103,7 @@ fun AddContent(
                 .padding(bottom = 8.dp)
         ) {
 
-            noteModel.noteItemList.forEach { noteItem ->
+            note.noteItemList.forEach { noteItem ->
                 when (noteItem.state) {
                     NoteItemState.TodoItem -> {
                         TodoItemView(

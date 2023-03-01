@@ -1,6 +1,5 @@
 package com.tis.todoify.presentation.ui.card
 
-import NoteModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,12 +18,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.tis.todoify.R
+import com.tis.todoify.domain.model.Note
 import kotlin.random.Random
 
 @Composable
 fun ListItemCard(
-    note: NoteModel,
+    modifier: Modifier= Modifier,
+    note: Note,
 ) {
 
 
@@ -33,8 +33,7 @@ fun ListItemCard(
 
 
     Column(
-        modifier =
-        Modifier
+        modifier = modifier
             .clip(MaterialTheme.shapes.medium)
             .fillMaxWidth()
             .background(

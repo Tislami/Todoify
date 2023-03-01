@@ -1,11 +1,11 @@
 package com.tis.todoify.presentation.screens.add
 
-import NoteItem
-import NoteModel
-import TableItem
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tis.todoify.domain.model.Note
+import com.tis.todoify.domain.model.NoteItem
+import com.tis.todoify.domain.model.TableItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddViewModel @Inject constructor() : ViewModel() {
 
-    val noteState = mutableStateOf(NoteModel())
+    val noteState = mutableStateOf(Note())
 
     private val _eventFlow = MutableSharedFlow<AddUiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
