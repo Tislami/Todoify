@@ -1,18 +1,20 @@
 package com.tis.todoify.domain.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.*
 
 
 
-
+@Entity
 data class Note(
+    @PrimaryKey(autoGenerate = true) val id : Int = 0,
     val title: String = "",
     val description: String = "",
     val noteItemList: List<NoteItem> = listOf(TextFieldItem("")),
     val tag: String="Todo",
-    val id: UUID = UUID.randomUUID(),
-    val date: Calendar = Calendar.getInstance()
-    )
+    //val date: Calendar = Calendar.getInstance()
+)
 
 sealed class NoteItem {
     abstract val state: NoteItemState
