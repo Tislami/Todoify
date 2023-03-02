@@ -2,16 +2,19 @@ package com.tis.todoify.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.tis.todoify.utils.NoteItemConverter
 import java.util.*
 
 
 
 @Entity
+@TypeConverters(NoteItemConverter::class)
 data class Note(
     @PrimaryKey(autoGenerate = true) val id : Int = 0,
     val title: String = "",
     val description: String = "",
-    val noteItemList: List<NoteItem> = listOf(TextFieldItem("")),
+    val noteItemList: List<NoteItem> = emptyList(),
     val tag: String="Todo",
     //val date: Calendar = Calendar.getInstance()
 )

@@ -4,10 +4,9 @@ import com.tis.todoify.domain.model.Note
 import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {
-
-    /*fun getAllNote() : Flow<List<Note>>
-    fun findByTitle() : Flow<Note?>*/
-    suspend fun insert()
-    suspend fun delete()
-    suspend fun update()
+    fun getAllNote() : Flow<List<Note>>
+    fun findByTitle(title: String): Flow<Note?>
+    suspend fun update(note: Note)
+    suspend fun delete(note: Note)
+    suspend fun insert(note: Note)
 }

@@ -1,27 +1,28 @@
 package com.tis.todoify.domain.repository
 
+import com.tis.todoify.data.local.NoteDao
 import com.tis.todoify.data.local.repository.NoteRepository
 import com.tis.todoify.domain.model.Note
 import kotlinx.coroutines.flow.Flow
 
-class NoteRepositoryImpl() : NoteRepository {
-    /*override fun getAllNote(): Flow<List<Note>> {
-
+class NoteRepositoryImpl(private val dao: NoteDao) : NoteRepository {
+    override fun getAllNote(): Flow<List<Note>> {
+        return dao.getAllNote()
     }
 
-    override fun findByTitle(): Flow<Note?> {
-        return null
-    }*/
-
-    override suspend fun insert(){
-
+    override fun findByTitle(title: String): Flow<Note?> {
+        return dao.findByTitle(title)
     }
 
-    override suspend fun delete(){
-
+    override suspend fun insert(note: Note){
+        dao.insert(note)
     }
 
-    override suspend fun update(){
+    override suspend fun delete(note: Note){
+        dao.delete(note)
+    }
 
+    override suspend fun update(note: Note){
+        dao.update(note)
     }
 }
