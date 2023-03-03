@@ -18,6 +18,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tis.todoify.domain.model.Note
+import com.tis.todoify.domain.model.NoteItemState
+import com.tis.todoify.domain.model.TextFieldItem
 import kotlin.random.Random
 
 @Composable
@@ -70,7 +72,7 @@ fun GridItemCard(
             }
 
             Text(
-                text = note.description,
+                text = (note.noteItemList[0] as TextFieldItem).text,
                 color = MaterialTheme.colors.onSurface,
                 fontSize = 14.sp,
                 maxLines = 7,

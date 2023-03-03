@@ -60,7 +60,8 @@ private fun FolderContent(
         items(noteList){note->
             ListItemCard(
                 modifier= Modifier.animateItemPlacement(),
-                note = note
+                note = note,
+                onClick = {}
             )
         }
     }

@@ -133,7 +133,7 @@ fun AddContent(
                                 deleteNoteItem(noteItem)
                                 focusManager.moveFocus(FocusDirection.Previous)
                             },
-                            fonsSize = 18.sp,
+                            isFocused = true
                         )
                     }
                     NoteItemState.Table -> {

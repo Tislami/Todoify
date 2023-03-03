@@ -1,7 +1,9 @@
 package com.tis.todoify.presentation.screens.detail
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -16,19 +18,36 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.tis.todoify.R
-import com.tis.todoify.domain.model.DenemeNote
-import com.tis.todoify.domain.model.defaultDenemeNote
+import com.tis.todoify.domain.model.*
+import com.tis.todoify.presentation.navigation.Screens
+import com.tis.todoify.presentation.screens.detail.components.DetailAlertDialog
 import com.tis.todoify.presentation.screens.detail.components.DetailTopAppBar
+import com.tis.todoify.presentation.screens.detail.components.TableItemView
+import com.tis.todoify.presentation.screens.detail.components.TodoItemView
+import com.tis.todoify.utils.onClick
 
 @Composable
 fun DetailScreen(
-    navHostController: NavHostController,
     modifier: Modifier = Modifier,
+    navHostController: NavHostController,
+    detailViewModel: DetailViewModel = hiltViewModel(),
+    id: Int?,
 ) {
+
+    val detailState = detailViewModel.detailState.value
+    var showAlertDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = Unit) {
+        if (id != null) detailViewModel.getNote(id)
+        else navHostController.popBackStack()
+    }
 
     val isTitleVisible = remember { mutableStateOf(true) }
     val colors = listOf(
@@ -36,18 +55,39 @@ fun DetailScreen(
         Color(3, 155, 229, 255),
     )
 
+
+    if (showAlertDialog)
+        DetailAlertDialog(
+            onDismissRequest = {
+                navHostController.popBackStack()
+                showAlertDialog = false
+            },
+            submitOnclick = {
+                detailViewModel.update()
+                navHostController.popBackStack()
+            },
+            cancelOnClick = {
+                navHostController.popBackStack()
+            }
+        )
+
     Scaffold(
         topBar = {
             DetailTopAppBar(
-                colors,
+                navigationOnClick = {
+                    if (!detailState.isUpdate) navHostController.navigate(Screens.Home.route)
+                    else showAlertDialog = true
+                },
+                colors = colors,
                 title = defaultDenemeNote.title,
                 isTitleVisible = isTitleVisible.value
             )
         },
         content = { innerPadding ->
             DetailContent(
-                modifier = Modifier
-                    .padding(innerPadding),
+                modifier = Modifier.padding(innerPadding),
+                detailState = detailState,
+                todoItemOnclick = detailViewModel::updateNoteItem,
                 colors = colors,
                 isTitleVisible = isTitleVisible
             )
@@ -55,10 +95,12 @@ fun DetailScreen(
     )
 }
 
+
 @Composable
 fun DetailContent(
     modifier: Modifier,
-    denemeNote: DenemeNote = defaultDenemeNote,
+    detailState: DetailState,
+    todoItemOnclick: (NoteItem, NoteItem) -> Unit,
     isTitleVisible: MutableState<Boolean>,
     colors: List<Color>
 ) {
@@ -68,39 +110,63 @@ fun DetailContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(scrollState)
             .background(
                 Brush.horizontalGradient(
                     colors = colors,
                 )
-            ),
+            )
+            .padding(horizontal = 16.dp)
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Head(denemeNote, isTitleVisible = isTitleVisible)
+        Head(
+            note = detailState.note,
+            isTitleVisible = isTitleVisible
+        )
 
-        Surface(
-            shape = RoundedCornerShape(topEnd = 64.dp),
-            color = MaterialTheme.colors.background,
-            modifier = Modifier.fillMaxSize()
+        Divider()
+
+        Column(
+            // shape = RoundedCornerShape(topEnd = 64.dp),
+            //color = MaterialTheme.colors.background,
+            modifier = Modifier
+                .fillMaxSize()
         ) {
-            Text(
-                modifier = Modifier.padding(16.dp),
-                //letterSpacing = TextUnit(2f, TextUnitType.Sp),
-                text = stringResource(id = R.string.lorem),
-            )
+            detailState.note.noteItemList.forEach { noteItem ->
+                when (noteItem.state) {
+                    NoteItemState.TodoItem -> {
+                        TodoItemView(
+                            todoItem = noteItem as TodoItem,
+                            onClick = {
+                                todoItemOnclick(
+                                    noteItem,
+                                    noteItem.copy(isComplete = it)
+                                )
+                            }
+                        )
+                    }
+                    NoteItemState.TextField -> {
+                        Text(
+                            text = (noteItem as TextFieldItem).text,
+                            color = MaterialTheme.colors.onSurface,
+                            fontSize = 18.sp,
+                        )
+                    }
+                    NoteItemState.Table -> {
+                        TableItemView(tableItem = noteItem as TableItem)
+                    }
+                }
+            }
         }
     }
 }
 
 @Composable
 private fun Head(
-    denemeNote: DenemeNote,
+    note: Note,
     isTitleVisible: MutableState<Boolean>,
 ) {
 
-    var ti = remember {
-        mutableStateOf(denemeNote.title)
-    }
     var isEditMode by remember { mutableStateOf(false) }
 
     val textScrollState = rememberScrollState()
@@ -108,19 +174,16 @@ private fun Head(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .padding(bottom = 32.dp, top = 16.dp),
+            .padding(horizontal = 8.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.Center
     ) {
         BasicTextField(
-            value = ti.value,
+            value = note.title,
             maxLines = 2,
             readOnly = true,
-            onValueChange = { ti.value = it },
+            onValueChange = { },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = {
-                isEditMode = false
-            }),
+            keyboardActions = KeyboardActions(onDone = { isEditMode = false }),
             textStyle = TextStyle(
                 color = MaterialTheme.colors.onSurface,
                 fontSize = 24.sp,
@@ -129,11 +192,11 @@ private fun Head(
         )
     }
 
-    Spacer(modifier = Modifier.height(4.dp))
-
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
 
@@ -143,7 +206,11 @@ private fun Head(
             fontSize = 12.sp,
         )
 
-        Canvas(modifier = Modifier.size(5.dp)) {
+        Canvas(
+            modifier = Modifier
+                .padding(horizontal = 4.dp)
+                .size(5.dp)
+        ) {
             drawCircle(color = Color.White)
         }
 

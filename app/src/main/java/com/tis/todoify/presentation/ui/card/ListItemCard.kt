@@ -13,24 +13,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key.Companion.Calendar
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tis.todoify.domain.model.Note
+import com.tis.todoify.domain.model.TextFieldItem
+import com.tis.todoify.utils.onClick
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.random.Random
 
 @Composable
 fun ListItemCard(
-    modifier: Modifier= Modifier,
+    modifier: Modifier = Modifier,
     note: Note,
+    onClick: onClick,
 ) {
-
-
-    val color = Color (255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-    val color1 = Color (255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-
+    val color = Color(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+    val color1 = Color(255, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
 
     Column(
         modifier = modifier
@@ -44,12 +47,9 @@ fun ListItemCard(
                     )
                 ),
             )
-
             .heightIn(min = 50.dp, max = 500.dp)
-            .clickable { }
-            .padding(vertical = 4.dp, horizontal = 16.dp)
-
-        ,
+            .clickable { onClick() }
+            .padding(vertical = 4.dp, horizontal = 16.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -74,7 +74,7 @@ fun ListItemCard(
 
 
         Text(
-            text = note.description,
+            text = (note.noteItemList[0] as TextFieldItem).text,
             color = MaterialTheme.colors.onSurface,
             fontSize = 14.sp,
             maxLines = 5,
@@ -86,13 +86,16 @@ fun ListItemCard(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            val format = SimpleDateFormat("dd/MM/yy hh:mm a", Locale.US)
+            val date = format.parse(note.date)
+            val day = SimpleDateFormat("dd").format(date)
+            val month = SimpleDateFormat("MMMM", Locale.US).format(date)
             Text(
-                text = "19 June",
+                text = "$day $month",
                 color = MaterialTheme.colors.onSurface,
                 fontSize = 10.sp,
                 maxLines = 1,
             )
-
             Surface(
                 shape = RoundedCornerShape(25),
                 color = Color.Gray.copy(alpha = .75f)

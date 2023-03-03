@@ -5,6 +5,7 @@ import androidx.compose.runtime.Stable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.tis.todoify.presentation.screens.add.AddScreen
 import com.tis.todoify.presentation.screens.detail.DetailScreen
 import com.tis.todoify.presentation.screens.home.HomeScreen
@@ -27,8 +28,13 @@ fun AppNavigation() {
             AddScreen(navHostController = navHostController)
         }
 
-        composable(route = Screens.Detail.route) {
-            DetailScreen(navHostController = navHostController)
+        composable(route = Screens.Detail.route.plus("/{noteId}"),
+            arguments = listOf(navArgument("noteId") { defaultValue = 0 })
+        ) {backStackEntry ->
+            DetailScreen(
+                navHostController = navHostController,
+                id = backStackEntry.arguments?.getInt("noteId")
+            )
         }
     }
 }

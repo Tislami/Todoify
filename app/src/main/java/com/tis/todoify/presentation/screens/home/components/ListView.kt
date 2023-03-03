@@ -9,9 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.invalidateGroupsWithKey
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.key.Key.Companion.Calendar
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -24,8 +22,9 @@ import java.util.*
 @Composable
 fun ListView(
     noteList: List<Note>,
+    onItemClick: (Note)-> Unit,
 ) {
-    val grouped = noteList.groupBy { it.title }
+    val grouped = noteList.groupBy { it.tag }
 
     LazyColumn(
         contentPadding = PaddingValues(8.dp),
@@ -40,7 +39,8 @@ fun ListView(
             items(noteList) { note ->
                 ListItemCard(
                     modifier = Modifier.animateItemPlacement(),
-                    note = note
+                    note = note,
+                    onClick = { onItemClick(note)  }
                 )
             }
         }

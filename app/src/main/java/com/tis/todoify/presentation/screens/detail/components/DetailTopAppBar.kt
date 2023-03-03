@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.tis.todoify.utils.onClick
 
 
 @Composable
@@ -26,6 +27,7 @@ fun DetailTopAppBar(
     colors: List<Color>,
     title: String,
     isTitleVisible: Boolean,
+    navigationOnClick : onClick
 ) {
     TopAppBar(
         modifier = Modifier.background(
@@ -45,7 +47,7 @@ fun DetailTopAppBar(
             )
         },
         navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = navigationOnClick) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back",

@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.tis.todoify.domain.model.Note
 import com.tis.todoify.presentation.navigation.Screens
 import com.tis.todoify.presentation.screens.home.components.FolderView
 import com.tis.todoify.presentation.screens.home.components.GridView
@@ -18,6 +19,7 @@ import com.tis.todoify.presentation.screens.home.components.ListView
 import com.tis.todoify.presentation.screens.home.components.top_app_bar.HomeTopAppBar
 import com.tis.todoify.presentation.ui.card.TagItemCard
 import com.tis.todoify.presentation.ui.component.AppFab
+
 @Composable
 fun HomeScreen(
     navHostController: NavHostController,
@@ -39,7 +41,8 @@ fun HomeScreen(
         content = { innerPadding ->
             HomeContent(
                 modifier = Modifier.padding(innerPadding),
-                homeState = homeState
+                homeState = homeState,
+                onItemClick = { navHostController.navigate(Screens.Detail.route+"/${it.id}") }
             )
         },
         floatingActionButton = {
@@ -54,6 +57,7 @@ fun HomeScreen(
 private fun HomeContent(
     modifier: Modifier,
     homeState: HomeState,
+    onItemClick: (Note)->Unit,
 ) {
     Column(
         modifier = modifier
@@ -62,14 +66,18 @@ private fun HomeContent(
     ) {
         LazyRow(
             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)){
-            items(15){
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(15) {
                 TagItemCard()
             }
         }
         when (homeState.viewStyle) {
             ViewStyle.List -> {
-                ListView(noteList = homeState.noteList)
+                ListView(
+                    noteList = homeState.noteList,
+                    onItemClick = onItemClick
+                )
             }
             ViewStyle.Folder -> {
                 FolderView(

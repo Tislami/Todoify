@@ -1,25 +1,26 @@
 package com.tis.todoify.domain.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.tis.todoify.utils.DateTypeConverter
 import com.tis.todoify.utils.NoteItemTypeConverter
-import java.util.*
-
+import java.sql.Date
 
 
 @Entity
-@TypeConverters(NoteItemTypeConverter::class)
+@TypeConverters(NoteItemTypeConverter::class, DateTypeConverter::class)
 data class Note(
-    @PrimaryKey(autoGenerate = true) val id : Int? = null,
+    @PrimaryKey(autoGenerate = true) val id: Int? = null,
     val title: String = "",
-    val description: String = "",
-    val noteItemList: List<NoteItem> = listOf(),
-    val tag: String="Todo",
+    val noteItemList: List<NoteItem> = listOf(TextFieldItem("")),
+    val tag: String = "Todo",
+    val date: String = ""
 )
 
 sealed class NoteItem {
-     abstract val state: NoteItemState
+    abstract val state: NoteItemState
 }
 
 data class TodoItem(
@@ -43,7 +44,7 @@ data class TableItem(
     override val state = NoteItemState.Table
 }
 
-enum class NoteItemState{
+enum class NoteItemState {
     TodoItem,
     TextField,
     Table

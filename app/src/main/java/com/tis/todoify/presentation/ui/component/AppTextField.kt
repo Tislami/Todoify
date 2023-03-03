@@ -38,7 +38,7 @@ fun AppTextField(
 
     LaunchedEffect(key1 = Unit){
         if (isFocused) {
-          //  focusRequester.requestFocus()
+            focusRequester.requestFocus()
         }
     }
 

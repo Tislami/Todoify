@@ -75,7 +75,7 @@ fun TableItemView(
 }
 
 @Composable
-fun TableCell(
+private fun TableCell(
     value: String,
     onValueChange: (String) -> Unit,
     backgroundColor: Color = Color.Unspecified,

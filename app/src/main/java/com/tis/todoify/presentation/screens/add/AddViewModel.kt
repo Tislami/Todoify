@@ -11,6 +11,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -79,6 +81,9 @@ class AddViewModel @Inject constructor(
 
     fun save(){
         viewModelScope.launch {
+            noteState.value= noteState.value.copy(
+                date = SimpleDateFormat().format(Date())
+            )
             repository.insert(noteState.value)
         }
     }
