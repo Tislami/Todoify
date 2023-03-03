@@ -1,11 +1,10 @@
 package com.tis.todoify.utils
 
-import android.util.Log
 import androidx.room.TypeConverter
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
 import com.tis.todoify.domain.model.*
-import java.lang.reflect.Type
+import java.sql.Date
 
 
 class NoteItemTypeConverter {
@@ -66,3 +65,14 @@ class NoteItemTypeConverter {
     }
 }
 
+class DateTypeConverter {
+    @TypeConverter
+    fun fromTimestamp(value: Long?): Date? {
+        return value?.let { Date(it) }
+    }
+
+    @TypeConverter
+    fun dateToTimestamp(date: Date?): Long? {
+        return date?.time
+    }
+}
