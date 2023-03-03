@@ -61,7 +61,9 @@ private fun FolderContent(
             ListItemCard(
                 modifier= Modifier.animateItemPlacement(),
                 note = note,
-                onClick = {}
+                onClick = {},
+                onDelete = {},
+                onEdit = { }
             )
         }
     }

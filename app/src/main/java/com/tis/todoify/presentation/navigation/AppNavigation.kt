@@ -24,13 +24,20 @@ fun AppNavigation() {
             )
         }
 
-        composable(route = Screens.Add.route) {
-            AddScreen(navHostController = navHostController)
+        composable(
+            route = Screens.Add.route.plus("/{noteId}"),
+            arguments = listOf(navArgument("noteId"){ defaultValue = -1 })
+        ) { backStackEntry ->
+            AddScreen(
+                navHostController = navHostController,
+                id = backStackEntry.arguments?.getInt("noteId")!!
+            )
         }
 
-        composable(route = Screens.Detail.route.plus("/{noteId}"),
+        composable(
+            route = Screens.Detail.route.plus("/{noteId}"),
             arguments = listOf(navArgument("noteId") { defaultValue = 0 })
-        ) {backStackEntry ->
+        ) { backStackEntry ->
             DetailScreen(
                 navHostController = navHostController,
                 id = backStackEntry.arguments?.getInt("noteId")

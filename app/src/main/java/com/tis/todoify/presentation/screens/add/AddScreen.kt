@@ -22,9 +22,18 @@ import com.tis.todoify.presentation.ui.component.AppTextField
 @Composable
 fun AddScreen(
     navHostController: NavHostController,
-    addViewModel: AddViewModel = hiltViewModel()
+    addViewModel: AddViewModel = hiltViewModel(),
+    id: Int
 ) {
+
+    LaunchedEffect(key1 = Unit) {
+        if (id != -1) {
+            addViewModel.getNoteById(id)
+        }
+    }
+
     val noteModelState = addViewModel.noteState.value
+
     Scaffold(
         topBar = {
             AddTopAppBar(
@@ -49,7 +58,8 @@ fun AddScreen(
                 icon = Icons.Default.Done,
                 onClick = {
                     navHostController.popBackStack()
-                    addViewModel.save()
+                    if (id != -1) addViewModel.update()
+                    else addViewModel.save()
                 }
             )
         }

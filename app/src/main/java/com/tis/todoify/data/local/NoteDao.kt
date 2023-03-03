@@ -10,7 +10,7 @@ interface NoteDao {
     fun getAllNote(): Flow<List<Note>>
 
     @Query("SELECT * FROM note WHERE id = :id")
-    fun findById(id: Int): Flow<Note?>
+    fun findById(id: Int): Flow<Note>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(note: Note)

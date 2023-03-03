@@ -29,20 +29,11 @@ class HomeViewModel @Inject constructor(
                 )
             }
         }
-
-
     }
 
     fun delete(note: Note){
         viewModelScope.launch {
             repository.delete(note)
-        }
-    }
-
-
-    fun update(note: Note){
-        viewModelScope.launch {
-            repository.update(note)
         }
     }
 

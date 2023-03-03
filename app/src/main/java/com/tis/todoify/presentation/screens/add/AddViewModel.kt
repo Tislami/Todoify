@@ -10,6 +10,7 @@ import com.tis.todoify.domain.model.TableItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -75,6 +76,20 @@ class AddViewModel @Inject constructor(
                     tableValues = newTableValues
                 )
             }
+        }
+    }
+
+    fun getNoteById(id: Int){
+        viewModelScope.launch {
+            repository.findById(id).collect{
+                noteState.value = it
+            }
+        }
+    }
+
+    fun update(){
+        viewModelScope.launch {
+            repository.update(noteState.value)
         }
     }
 

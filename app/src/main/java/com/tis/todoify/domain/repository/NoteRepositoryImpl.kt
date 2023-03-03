@@ -10,7 +10,7 @@ class NoteRepositoryImpl(private val dao: NoteDao) : NoteRepository {
         return dao.getAllNote()
     }
 
-    override fun findById(id: Int): Flow<Note?> {
+    override fun findById(id: Int): Flow<Note> {
         return dao.findById(id)
     }
 

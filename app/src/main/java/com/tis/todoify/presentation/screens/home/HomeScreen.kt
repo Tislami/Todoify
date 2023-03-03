@@ -42,12 +42,14 @@ fun HomeScreen(
             HomeContent(
                 modifier = Modifier.padding(innerPadding),
                 homeState = homeState,
-                onItemClick = { navHostController.navigate(Screens.Detail.route+"/${it.id}") }
+                onItemClick = { navHostController.navigate(Screens.Detail.route + "/${it}") },
+                onItemDelete = viewModel::delete,
+                onItemEdit = { navHostController.navigate(Screens.Add.route + "/${it}") }
             )
         },
         floatingActionButton = {
             AppFab(icon = Icons.Default.Add) {
-                navHostController.navigate(Screens.Add.route)
+                navHostController.navigate(Screens.Add.route+ "/-1")
             }
         }
     )
@@ -57,7 +59,9 @@ fun HomeScreen(
 private fun HomeContent(
     modifier: Modifier,
     homeState: HomeState,
-    onItemClick: (Note)->Unit,
+    onItemClick: (Int) -> Unit,
+    onItemEdit: (Int) -> Unit,
+    onItemDelete: (Note) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -76,7 +80,9 @@ private fun HomeContent(
             ViewStyle.List -> {
                 ListView(
                     noteList = homeState.noteList,
-                    onItemClick = onItemClick
+                    onItemClick = onItemClick,
+                    onDelete = onItemDelete,
+                    onEdit = onItemEdit
                 )
             }
             ViewStyle.Folder -> {
@@ -84,11 +90,16 @@ private fun HomeContent(
                     noteList = homeState.noteList,
                     onClick = {
 
-                    }
+                    },
                 )
             }
             ViewStyle.Grid -> {
-                GridView(noteList = homeState.noteList)
+                GridView(
+                    noteList = homeState.noteList,
+                    onItemClick = onItemClick,
+                    onDelete = onItemDelete,
+                    onEdit = onItemEdit
+                )
             }
         }
     }

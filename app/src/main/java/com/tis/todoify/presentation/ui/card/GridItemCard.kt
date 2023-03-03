@@ -24,6 +24,7 @@ import com.tis.todoify.domain.model.Note
 import com.tis.todoify.domain.model.NoteItemState
 import com.tis.todoify.domain.model.TextFieldItem
 import com.tis.todoify.presentation.ui.component.HorizontalSwipeAction
+import com.tis.todoify.presentation.ui.component.SwipeContent
 import com.tis.todoify.utils.onClick
 import kotlin.random.Random
 
@@ -31,6 +32,9 @@ import kotlin.random.Random
 fun GridItemCard(
     modifier: Modifier = Modifier,
     note: Note,
+    onClick: onClick,
+    onDelete: onClick,
+    onEdit : onClick
 ) {
 
 
@@ -48,14 +52,14 @@ fun GridItemCard(
             SwipeContent(
                 icon = Icons.Default.Delete,
                 text = "Delete",
-                onClick = {}
+                onClick = onDelete
             )
         },
         leadingContent = {
             SwipeContent(
                 icon = Icons.Default.Edit,
                 text = "Edit",
-                onClick = {}
+                onClick = onEdit
             )
         }
     ) {
@@ -63,7 +67,7 @@ fun GridItemCard(
         Column(
             modifier = modifier
                 .clip(MaterialTheme.shapes.large)
-                .clickable { }
+                .clickable { onClick() }
                 .background(
                     brush = Brush.horizontalGradient(
                         colors = listOf(
@@ -147,21 +151,3 @@ private fun Head(note: Note) {
     }
 }
 
-@Composable
-private fun SwipeContent(
-    icon: ImageVector,
-    text: String,
-    onClick: onClick,
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(start = 8.dp)
-            .clickable { onClick() },
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Icon(imageVector = icon, contentDescription = null)
-        Text(text = text)
-    }
-}
