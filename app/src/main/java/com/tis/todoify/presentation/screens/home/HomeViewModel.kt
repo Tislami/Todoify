@@ -29,6 +29,8 @@ class HomeViewModel @Inject constructor(
                 )
             }
         }
+
+
     }
 
     fun delete(note: Note){

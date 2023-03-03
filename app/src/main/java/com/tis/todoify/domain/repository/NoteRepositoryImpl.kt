@@ -2,7 +2,7 @@ package com.tis.todoify.domain.repository
 
 import com.tis.todoify.data.local.NoteDao
 import com.tis.todoify.data.local.repository.NoteRepository
-import com.tis.todoify.domain.model.Note
+import com.tis.todoify.domain.model.*
 import kotlinx.coroutines.flow.Flow
 
 class NoteRepositoryImpl(private val dao: NoteDao) : NoteRepository {

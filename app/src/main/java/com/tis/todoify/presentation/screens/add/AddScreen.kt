@@ -48,11 +48,8 @@ fun AddScreen(
             AppFab(
                 icon = Icons.Default.Done,
                 onClick = {
-                    if (noteModelState.title.isEmpty()) {
-                        navHostController.popBackStack()
-                    } else {
-                        addViewModel.save()
-                    }
+                    navHostController.popBackStack()
+                    addViewModel.save()
                 }
             )
         }

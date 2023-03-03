@@ -3,6 +3,7 @@ package com.tis.todoify.presentation.screens.add
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tis.todoify.data.local.repository.NoteRepository
 import com.tis.todoify.domain.model.Note
 import com.tis.todoify.domain.model.NoteItem
 import com.tis.todoify.domain.model.TableItem
@@ -13,7 +14,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddViewModel @Inject constructor() : ViewModel() {
+class AddViewModel @Inject constructor(
+    private val repository: NoteRepository
+) : ViewModel() {
 
     val noteState = mutableStateOf(Note())
 
@@ -75,7 +78,9 @@ class AddViewModel @Inject constructor() : ViewModel() {
 
 
     fun save(){
-
+        viewModelScope.launch {
+            repository.insert(noteState.value)
+        }
     }
 }
 
