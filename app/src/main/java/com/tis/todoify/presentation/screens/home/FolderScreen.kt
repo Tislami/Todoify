@@ -15,7 +15,7 @@ import com.tis.todoify.domain.model.FolderModel
 import com.tis.todoify.domain.model.Note
 import com.tis.todoify.domain.model.defaultFolderModel
 import com.tis.todoify.presentation.screens.home.components.top_app_bar.FolderTopAppBar
-import com.tis.todoify.presentation.ui.card.ListItemCard
+import com.tis.todoify.presentation.ui.card.NoteItemCard
 
 @Composable
 fun FolderScreen(
@@ -58,7 +58,7 @@ private fun FolderContent(
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ){
         items(noteList){note->
-            ListItemCard(
+            NoteItemCard(
                 modifier= Modifier.animateItemPlacement(),
                 note = note,
                 onClick = {},

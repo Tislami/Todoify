@@ -79,7 +79,7 @@ fun DetailScreen(
                     else showAlertDialog = true
                 },
                 colors = colors,
-                title = defaultDenemeNote.title,
+                title = "defaultDenemeNote.title",
                 isTitleVisible = isTitleVisible.value
             )
         },

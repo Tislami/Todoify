@@ -109,7 +109,6 @@ fun AddContent(
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = 8.dp)
         ) {
-
             note.noteItemList.forEach { noteItem ->
                 when (noteItem.state) {
                     NoteItemState.TodoItem -> {

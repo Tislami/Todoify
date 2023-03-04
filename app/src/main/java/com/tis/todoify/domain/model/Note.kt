@@ -1,22 +1,20 @@
 package com.tis.todoify.domain.model
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.tis.todoify.utils.DateTypeConverter
 import com.tis.todoify.utils.NoteItemTypeConverter
-import java.sql.Date
 
 
 @Entity
-@TypeConverters(NoteItemTypeConverter::class, DateTypeConverter::class)
+@TypeConverters(NoteItemTypeConverter::class)
 data class Note(
     @PrimaryKey(autoGenerate = true) val id: Int? = null,
     val title: String = "",
     val noteItemList: List<NoteItem> = listOf(TextFieldItem("")),
     val tag: String = "Todo",
-    val date: String = ""
+    val date: String = "",
+    val color: Int = 0,
 )
 
 sealed class NoteItem {

@@ -17,15 +17,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tis.todoify.domain.model.Note
-import com.tis.todoify.presentation.ui.card.ListItemCard
+import com.tis.todoify.presentation.ui.card.NoteItemCard
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ListView(
     noteList: List<Note>,
     onItemClick: (Int) -> Unit,
     onDelete: (Note) -> Unit,
     onEdit: (Int) -> Unit,
+   // moreOnClick: () -> Unit
 ) {
 
     val lazyListState = rememberLazyListState()
@@ -45,11 +46,13 @@ fun ListView(
                 items = noteList,
                 key = { it.id!! }
             ) { note ->
-                ListItemCard(
+                NoteItemCard(
+                    modifier = Modifier.heightIn(min = 50.dp, max = 500.dp),
                     note = note,
                     onClick = { onItemClick(note.id!!) },
                     onDelete = { onDelete(note) },
                     onEdit = { onEdit(note.id!!) },
+                    //moreOnClick = { moreOnClick() }
                 )
             }
         }

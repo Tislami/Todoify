@@ -1,6 +1,8 @@
 package com.tis.todoify.presentation.screens.add
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tis.todoify.data.local.repository.NoteRepository
@@ -97,7 +99,8 @@ class AddViewModel @Inject constructor(
     fun save(){
         viewModelScope.launch {
             noteState.value= noteState.value.copy(
-                date = SimpleDateFormat().format(Date())
+                date = SimpleDateFormat().format(Date()),
+                color = Color.Blue.toArgb()
             )
             repository.insert(noteState.value)
         }

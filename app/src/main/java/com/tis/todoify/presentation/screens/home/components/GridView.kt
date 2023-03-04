@@ -6,18 +6,16 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.tis.todoify.domain.model.Note
-import com.tis.todoify.presentation.ui.card.GridItemCard
-import com.tis.todoify.utils.onClick
+import com.tis.todoify.presentation.ui.card.NoteItemCard
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GridView(
     noteList: List<Note>,
@@ -33,11 +31,9 @@ fun GridView(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(noteList,key = { it.id!! }) { note ->
-            GridItemCard(
-                modifier = Modifier.animateItemPlacement(
-                    tween(1000, easing = EaseOutBack)
-                ),
+        items(noteList, key = { it.id!! }) { note ->
+            NoteItemCard(
+                modifier = Modifier.height(200.dp),
                 note = note,
                 onClick = { onItemClick(note.id!!) },
                 onDelete = { onDelete(note) },

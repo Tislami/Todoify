@@ -1,5 +1,7 @@
 package com.tis.todoify.utils
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.room.TypeConverter
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
@@ -62,17 +64,5 @@ class NoteItemTypeConverter {
             }
         }
         return noteItemList
-    }
-}
-
-class DateTypeConverter {
-    @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
-    }
-
-    @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time
     }
 }
