@@ -1,18 +1,20 @@
 package com.tis.todoify.presentation.screens.add
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tis.todoify.data.local.repository.NoteRepository
+import com.tis.todoify.domain.model.BackgroundState
 import com.tis.todoify.domain.model.Note
 import com.tis.todoify.domain.model.NoteItem
 import com.tis.todoify.domain.model.TableItem
+import com.tis.todoify.utils.extensions.BackgroundStyle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,8 +29,17 @@ class AddViewModel @Inject constructor(
 
     private val _eventFlow = MutableSharedFlow<AddUiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
+
+
     fun setTitle(value: String) {
         noteState.value = noteState.value.copy(title = value)
+    }
+
+    fun updateBackgroundState(backgroundState: BackgroundState) {
+        Log.d("ColorPickerTagVM", "updateBackgroundState: $backgroundState")
+        noteState.value = noteState.value.copy(
+            backgroundState = backgroundState
+        )
     }
 
     fun addNoteItem(noteItem: NoteItem) {
@@ -36,7 +47,6 @@ class AddViewModel @Inject constructor(
             .apply { add(noteItem) }
         noteState.value = noteState.value.copy(noteItemList = newList)
     }
-
     fun deleteNoteItem(noteItem: NoteItem) {
         val newList = noteState.value.noteItemList.toMutableList()
             .apply {
@@ -44,7 +54,6 @@ class AddViewModel @Inject constructor(
             }
         noteState.value = noteState.value.copy(noteItemList = newList)
     }
-
     fun updateNoteItem(oldNoteItem: NoteItem, newNoteItem: NoteItem) {
         val index = noteState.value.noteItemList.indexOf(oldNoteItem)
         if (index >= 0) {
@@ -54,7 +63,6 @@ class AddViewModel @Inject constructor(
             )
         }
     }
-
     fun updateTableCell(noteItem: TableItem, operation: TableOperation): NoteItem {
         return when (operation) {
             TableOperation.DeleteRow -> {
@@ -88,19 +96,15 @@ class AddViewModel @Inject constructor(
             }
         }
     }
-
     fun update(){
         viewModelScope.launch {
             repository.update(noteState.value)
         }
     }
-
-
     fun save(){
         viewModelScope.launch {
             noteState.value= noteState.value.copy(
                 date = SimpleDateFormat().format(Date()),
-                color = Color.Blue.toArgb()
             )
             repository.insert(noteState.value)
         }

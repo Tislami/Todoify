@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -18,6 +19,8 @@ import com.tis.todoify.domain.model.*
 import com.tis.todoify.presentation.screens.add.components.*
 import com.tis.todoify.presentation.ui.component.AppFab
 import com.tis.todoify.presentation.ui.component.AppTextField
+import com.tis.todoify.utils.extensions.BackgroundStyle
+import com.tis.todoify.utils.extensions.backgroundState
 
 @Composable
 fun AddScreen(
@@ -27,30 +30,18 @@ fun AddScreen(
 ) {
 
     LaunchedEffect(key1 = Unit) {
-        if (id != -1) {
-            addViewModel.getNoteById(id)
-        }
+        if (id != -1) addViewModel.getNoteById(id)
     }
 
-    val noteModelState = addViewModel.noteState.value
+    val noteState = addViewModel.noteState.value
 
     Scaffold(
         topBar = {
             AddTopAppBar(
+                backgroundState = noteState.backgroundState,
                 backOnClick = { navHostController.popBackStack() },
-                addTextFieldItem = { addViewModel.addNoteItem(TextFieldItem()) },
-                addTodoItem = { addViewModel.addNoteItem(TodoItem()) },
-                addTable = {
-                    addViewModel.addNoteItem(
-                        TableItem(
-                            columnCount = 3,
-                            rowCount = 3,
-                            tableValues = buildList {
-                                repeat(3 * 3) { add("$it") }
-                            }
-                        )
-                    )
-                },
+                onBackgroundStateChange = addViewModel::updateBackgroundState,
+                addNoteItem = addViewModel::addNoteItem,
             )
         },
         floatingActionButton = {
@@ -66,7 +57,7 @@ fun AddScreen(
     ) { innerPadding ->
         AddContent(
             modifier = Modifier.padding(innerPadding),
-            note = noteModelState,
+            note = noteState,
             setTitle = addViewModel::setTitle,
             addNoteItem = addViewModel::addNoteItem,
             updateNoteItem = addViewModel::updateNoteItem,
@@ -87,13 +78,12 @@ fun AddContent(
     updateTableCell: (TableItem, TableOperation) -> NoteItem,
 ) {
     val focusManager = LocalFocusManager.current
-
     Column(
         modifier = modifier
             .fillMaxSize()
+            .backgroundState(note.backgroundState)
             .padding(horizontal = 16.dp)
     ) {
-
         AppTextField(
             value = note.title,
             onValueChange = setTitle,

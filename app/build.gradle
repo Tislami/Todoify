@@ -95,4 +95,11 @@ dependencies {
 
     //Gson
     implementation 'com.google.code.gson:gson:2.9.0'
+
+    //Color
+    implementation 'com.godaddy.android.colorpicker:compose-color-picker:0.7.0'
+
+    //Reflection
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.10"
+
 }

@@ -26,7 +26,6 @@ fun ListView(
     onItemClick: (Int) -> Unit,
     onDelete: (Note) -> Unit,
     onEdit: (Int) -> Unit,
-   // moreOnClick: () -> Unit
 ) {
 
     val lazyListState = rememberLazyListState()
@@ -52,7 +51,6 @@ fun ListView(
                     onClick = { onItemClick(note.id!!) },
                     onDelete = { onDelete(note) },
                     onEdit = { onEdit(note.id!!) },
-                    //moreOnClick = { moreOnClick() }
                 )
             }
         }

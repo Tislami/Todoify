@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -15,16 +16,27 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.*
+import com.tis.todoify.R
 import com.tis.todoify.domain.model.Note
+import com.tis.todoify.domain.model.NoteItemState
 import com.tis.todoify.domain.model.TextFieldItem
+import com.tis.todoify.domain.model.TodoItem
+import com.tis.todoify.presentation.screens.detail.components.TodoItemView
 import com.tis.todoify.presentation.ui.component.HorizontalSwipeAction
 import com.tis.todoify.presentation.ui.component.SwipeContent
+import com.tis.todoify.utils.extensions.backgroundState
+import com.tis.todoify.utils.extensions.forEachFirstThree
 import com.tis.todoify.utils.onClick
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -78,7 +90,7 @@ fun NoteItemCard(
             Column(
                 modifier = modifier
                     .fillMaxWidth()
-                    .background(color = Color(note.color))
+                    .backgroundState(note.backgroundState)
                     .clickable { onClick() }
                     .padding(vertical = 4.dp, horizontal = 16.dp),
                 horizontalAlignment = Alignment.Start,
@@ -94,7 +106,8 @@ fun NoteItemCard(
                 )
                 Body(
                     modifier = modifier,
-                    note = note)
+                    note = note
+                )
             }
         }
     }
@@ -103,20 +116,60 @@ fun NoteItemCard(
 @Composable
 private fun Body(
     modifier: Modifier,
-    note: Note) {
+    note: Note
+) {
 
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            text = (note.noteItemList[0] as TextFieldItem).text,
-            color = MaterialTheme.colors.onSurface,
-            fontSize = 14.sp,
-            maxLines = 5,
-            overflow = TextOverflow.Ellipsis,
-            softWrap = true
-        )
+        Column {
+            note.noteItemList.forEachFirstThree {
+                when (it.state) {
+                    NoteItemState.TodoItem -> {
+                        Row(
+                            modifier = Modifier.padding(vertical = 2.dp),
+                            verticalAlignment = Alignment.Top
+                        ) {
+                            Icon(
+                                painter =
+                                if ((it as TodoItem).isComplete) painterResource(id = R.drawable.check_circle_24)
+                                else painterResource(id = R.drawable.outline_circle_24),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .padding(end = 4.dp)
+                                    .size(16.dp)
+                                    .clip(CircleShape),
+                                tint = if (it.isComplete) MaterialTheme.colors.primary
+                                else Color.White,
+                            )
+
+                            Text(
+                                modifier = Modifier.padding(vertical = 2.dp),
+                                text = it.text,
+                                color = MaterialTheme.colors.onSurface,
+                                fontSize = 12.sp,
+                                textDecoration = if (it.isComplete) TextDecoration.LineThrough
+                                else null
+                            )
+                        }
+                    }
+                    NoteItemState.TextField -> {
+                        Text(
+                            text = (it as TextFieldItem).text,
+                            color = MaterialTheme.colors.onSurface,
+                            fontSize = 14.sp,
+                            maxLines = 5,
+                            overflow = TextOverflow.Ellipsis,
+                            softWrap = true
+                        )
+                    }
+                    NoteItemState.Table -> {
+
+                    }
+                }
+            }
+        }
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -203,9 +256,11 @@ private fun MoreContent(
     onLock: onClick
 ) {
     DropdownMenu(
-        modifier = Modifier.border(
-            1.dp, MaterialTheme.colors.primary, MaterialTheme.shapes.medium
-        ),
+        modifier = Modifier
+            .background(MaterialTheme.colors.background)
+            .border(
+                1.dp, MaterialTheme.colors.primary, MaterialTheme.shapes.medium
+            ),
         offset = DpOffset(x = contentWidth.value, y = (-40).dp),
         expanded = showMore.value,
         onDismissRequest = { showMore.value = false }

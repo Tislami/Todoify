@@ -66,3 +66,16 @@ class NoteItemTypeConverter {
         return noteItemList
     }
 }
+
+
+class BackgroundStateConverter {
+    @TypeConverter
+    fun fromBackgroundState(backgroundState: BackgroundState): String {
+        return Gson().toJson(backgroundState)
+    }
+
+    @TypeConverter
+    fun toBackgroundState(backgroundStateString: String): BackgroundState {
+        return Gson().fromJson(backgroundStateString, BackgroundState::class.java)
+    }
+}

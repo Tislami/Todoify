@@ -31,6 +31,7 @@ import com.tis.todoify.presentation.screens.detail.components.DetailAlertDialog
 import com.tis.todoify.presentation.screens.detail.components.DetailTopAppBar
 import com.tis.todoify.presentation.screens.detail.components.TableItemView
 import com.tis.todoify.presentation.screens.detail.components.TodoItemView
+import com.tis.todoify.utils.extensions.backgroundState
 import com.tis.todoify.utils.onClick
 
 @Composable
@@ -50,10 +51,6 @@ fun DetailScreen(
     }
 
     val isTitleVisible = remember { mutableStateOf(true) }
-    val colors = listOf(
-        Color(0, 172, 193, 255),
-        Color(3, 155, 229, 255),
-    )
 
 
     if (showAlertDialog)
@@ -78,7 +75,7 @@ fun DetailScreen(
                     if (!detailState.isUpdate) navHostController.navigate(Screens.Home.route)
                     else showAlertDialog = true
                 },
-                colors = colors,
+                color = Color(detailState.note.backgroundState.colors[0]),
                 title = "defaultDenemeNote.title",
                 isTitleVisible = isTitleVisible.value
             )
@@ -88,7 +85,6 @@ fun DetailScreen(
                 modifier = Modifier.padding(innerPadding),
                 detailState = detailState,
                 todoItemOnclick = detailViewModel::updateNoteItem,
-                colors = colors,
                 isTitleVisible = isTitleVisible
             )
         }
@@ -102,7 +98,6 @@ fun DetailContent(
     detailState: DetailState,
     todoItemOnclick: (NoteItem, NoteItem) -> Unit,
     isTitleVisible: MutableState<Boolean>,
-    colors: List<Color>
 ) {
 
     val scrollState = rememberScrollState()
@@ -110,11 +105,7 @@ fun DetailContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                Brush.horizontalGradient(
-                    colors = colors,
-                )
-            )
+            .backgroundState(detailState.note.backgroundState)
             .padding(horizontal = 16.dp)
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,

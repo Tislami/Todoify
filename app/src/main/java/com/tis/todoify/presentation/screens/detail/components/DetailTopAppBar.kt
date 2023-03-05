@@ -24,18 +24,13 @@ import com.tis.todoify.utils.onClick
 
 @Composable
 fun DetailTopAppBar(
-    colors: List<Color>,
+    color: Color,
     title: String,
     isTitleVisible: Boolean,
     navigationOnClick : onClick
 ) {
     TopAppBar(
-        modifier = Modifier.background(
-            Brush.horizontalGradient(
-                colors = colors,
-            )
-        ),
-        backgroundColor = Color.Transparent,
+        backgroundColor = color,
         elevation = 0.dp,
         title = {
             Text(
